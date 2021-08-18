@@ -1,1 +1,2 @@
-# php-js-email-example
+# Simple email form using PHP and Javascript
+This is a basic example of sending an email using PHP on the back-end with an HTML form however using Javascript to perform the POST request. This way we can prevent the redirect a conventional form submission would cause and also give us the opportunity to inform the user that the email sent successfully.
