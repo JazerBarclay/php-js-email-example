@@ -68,6 +68,7 @@
                 })
                 .then(results => results.json())
                 .then(res => {
+                    document.querySelector('#contactForm').reset();
                     document.querySelector('.mailResponseText').innerHTML = res.message;
                     document.querySelector('.mailResponse').style.display = "block";
                     console.log(res.message)
