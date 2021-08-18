@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Email Send Example</title>
+    </head>
+    <body>
+
+        <form id="contactForm">
+            <label for="name">Name</label>
+            <input type="text" id="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+
+            <label for="message">Message</label>
+            <textarea id="message" required></textarea>
+
+            <!-- Notifications for 'error' Or 'successful'-->
+            <div class="mailResponse" style="display: none;">
+                <div class="alert alert-dismissible" role="alert">
+                    <button type="button" class="close"><span>×</span></button>
+                    <p class="mailResponseText"></p>
+                </div>
+            </div>
+
+            <!-- submit button -->
+            <button id="emailSubmit" type="submit">Send</button>
+        </form>
+
+        <!-- Script -->
+        <script>
+
+            const submitButton = document.querySelector('#emailSubmit')
+
+            submitButton.addEventListener("click", e => {
+
+                // Group data for PHP to use
+                let data = {
+                    'name': document.querySelector('#name').value,
+                    'email': document.querySelector('#email').value,
+                    'message': '<br>' + document.querySelector('#message').value.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                }
+
+                // If required data is missing, return with default action
+                if (data.name === "" || data.email === "" || data.message === "") {
+                    console.log("Missing Field")
+                    return
+                }
+
+                // If email is invalid then go no further
+                if (!emailIsValid(data.email)) {
+                    console.log("Invalid Email")
+                    return
+                }
+
+                console.log(JSON.stringify(data));
+
+                // Success send
+                fetch('mail.php', { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(data)
+                })
+                .then(results => results.json())
+                .then(res => {
+                    console.log(res.message)
+                })
+
+                // Prevent default at the end for default requirement messages
+                e.preventDefault()
+
+            });
+
+            function emailIsValid(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+            }
+
+        </script>
+        
+    </body>
+</html>
